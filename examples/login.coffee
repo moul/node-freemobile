@@ -3,13 +3,22 @@
 # clear terminal
 process.stdout.write '\u001B[2J\u001B[0;0f'
 
-{Client} = require '..'
+debug = require('debug') 'freemobile:examples:login'
 
-client = new Client
+FreeMobile = require '..'
+
+client = new FreeMobile
   verbose: true
   browser:
     verbose: true
+  login: process.argv[2]
+  password: process.argv[3]
 
 client.on 'ready', ->
-  console.log 'ready'
-  setTimeout (=> @goto ''), 3000
+  debug 'ready OK'
+
+  client.login ->
+    debug 'login OK'
+
+client.on 'logged', ->
+  debug 'logged'

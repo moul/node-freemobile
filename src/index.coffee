@@ -1,2 +1,1 @@
-module.exports =
-  Client: require('./client').Client
+module.exports = FreeMobile = require('./client')

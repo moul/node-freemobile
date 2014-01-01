@@ -9,19 +9,29 @@ class module.exports extends Fantomo
     @options.browser.urlPrefix = 'https://mobile.free.fr/'
 
   on_open: (path) =>
+    @inject 'utils'
     routing =
       'moncompte/': @on_open_moncompte
     do routing[path] if routing[path]?
 
   on_open_moncompte: =>
-    @inject 'get_connected_url', (url) =>
-      debug 'connected url', url
+    #@inject 'getConnectedUrl', (url) =>
+    #  debug 'connected url', url
 
-    @inject 'get_ident_div', (obj) =>
-      debug 'ident_div', obj?
+    #@inject 'getIdentDiv', (obj) =>
+    #  debug 'ident_div', obj?
 
-    @inject 'enter_credentials', @options.login, @options.password, (result) =>
-      debug 'credentials entered', result
+    #@inject 'getSmallImages', (images) =>
+    #  debug 'images', images
+
+    #@inject 'enterCredentials', @options.login, @options.password, (result) =>
+    #  debug 'credentials entered', result
+
+    #@inject 'getImagesData', (images) =>
+    #  debug 'images', images
+
+    @inject 'getImagesHash', (images) =>
+      debug 'images', images
 
   inject: (key, args...) =>
     if Inject.prototype[key]?

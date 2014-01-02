@@ -2,6 +2,7 @@ debug = require('debug') 'freemobile:client'
 Fantomo = require 'fantomo'
 Inject = require './inject'
 require './patch'
+utils = require './utils'
 
 
 class module.exports extends Fantomo
@@ -30,8 +31,10 @@ class module.exports extends Fantomo
     #@inject 'getImagesData', (images) =>
     #  debug 'images', images
 
-    @inject 'getImagesHash', (images) =>
-      debug 'images', images
+    @inject 'getImages', (images) =>
+      debug 'images', images.length
+      for image in images
+        utils.save_dataURL_to_file image.newCanvasData, "/tmp/freemobile-#{image.crc32}.png"
 
   inject: (key, args...) =>
     if Inject.prototype[key]?

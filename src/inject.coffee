@@ -162,15 +162,15 @@ Inject::utils = ->
 
 
   window.getImageHash = (img) ->
-    optimized = getOptimizedImage img
+    ret = getOptimizedImage img
     canvas = document.createElement 'canvas'
     ctx = canvas.getContext '2d'
-    canvas.width = optimized.max.x - optimized.min.x + 1
-    canvas.height = optimized.max.y - optimized.min.y + 1
+    canvas.width = ret.max.x - ret.min.x + 1
+    canvas.height = ret.max.y - ret.min.y + 1
     ctx.drawImage(
-      optimized.canvas
-      optimized.min.x
-      optimized.min.y
+      ret.canvas
+      ret.min.x
+      ret.min.y
       canvas.width
       canvas.height
       0
@@ -178,8 +178,15 @@ Inject::utils = ->
       canvas.width
       canvas.height
       )
-    dataUrl = canvas.toDataURL()
-    return crc32 dataUrl
+    ret.newCanvas = canvas
+    ret.newCanvasData = canvas.toDataURL()
+    return ret
+
+
+  window.getImageCrc = (img) ->
+    ret = getImageHash img
+    ret.crc32 = crc32 ret.newCanvasData
+    return ret
 
 
 Inject::getConnectedUrl = ->
@@ -204,23 +211,11 @@ Inject::getSmallImages = ->
   return data
 
 
-Inject::getImagesData = ->
-  data = []
+Inject::getImages = ->
+  images = []
   for img in getImageObjs()
-    data.push getImageBase64(img[0])
-  return data
-
-
-Inject::getImagesHash = ->
-  hashes = []
-  for img in getImageObjs()
-    hash = getImageHash(img[0])
-    for k, v of knownHashes
-      for h in v
-        if hash is h
-          console.log "YOUPIIIIIIIIIIIII #{k}"
-    hashes.push hash
-  return hashes
+    images.push getImageCrc(img[0])
+  return images
 
 
 Inject::enterCredentials = (login, password) ->

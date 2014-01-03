@@ -1,7 +1,6 @@
 debug = require('debug') 'freemobile:client'
 Fantomo = require 'fantomo'
 Inject = require './inject'
-require './patch'
 utils = require './utils'
 
 
